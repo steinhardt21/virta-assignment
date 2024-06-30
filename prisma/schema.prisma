@@ -14,3 +14,28 @@ datasource db {
   url      = env("DATABASE_URL")
   extensions = [postgis, cube, earthdistance]
 }
+
+model Station {
+  id        String   @id @default(cuid())
+  name      String
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now()) @map("created-at")
+  updatedAt DateTime @updatedAt @map("updated-at")
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @unique @map("company-id")
+}
+
+model Company {
+  id              String    @id @default(cuid())
+  parentId String?   @map("parent-id")
+  name            String
+  createdAt       DateTime  @default(now()) @map("created-at")
+  updatedAt       DateTime  @updatedAt @map("updated-at")
+  Station         Station[]
+  children        Company[] @relation("ParentChild")
+  parent          Company?  @relation("ParentChild", fields: [parentId], references: [id])
+
+  @@unique([parentId, id])
+}
