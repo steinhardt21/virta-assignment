@@ -94,7 +94,6 @@ const companiesApp = new Hono()
 
 const searchApp = new Hono()
   .get('/', zValidator("query", SearchQuerySchema, (result, c) => {
-    console.log('result')
     if (!result.success) {
       return c.text("Input payload is not correct. Be sure to insert in the params: radiusKilometers, companyId, latitude and longitude.", 400)
     }
@@ -105,6 +104,12 @@ const searchApp = new Hono()
       const stationsGroupedByLocations = await getStationsWithinRadiusForCompanyGrouped({ latitude, longitude, radiusKilometers, companyId })
       return c.json({ data: stationsGroupedByLocations }, 200)
     } catch (err) {
+
+      console.error(err)
+      if(err instanceof Error) {
+        return c.json({ error: err.message }, 400)
+      }
+
       return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
     }
   })

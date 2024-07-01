@@ -22,6 +22,14 @@ type GroupedLocation = {
 };
 
 export const getStationsWithinRadiusForCompanyGrouped = async (props: SearchQuery)  => {
+  const company = await prisma.company.findUnique({
+    where: { id: props.companyId }
+  })
+
+  if (!company) {
+    throw new Error("Company not found!")
+  }
+
   const stations = await prisma.station.findNearestStationsWithinRadiusForCompany(props)
   const groupedStations = groupStationsByLocation(stations)
   return groupedStations
