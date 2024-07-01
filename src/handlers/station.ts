@@ -29,6 +29,15 @@ export const getOneStation = async (id: string): Promise<Station | null> => {
 }
 
 export const createStation = async ({ name, latitude, longitude, companyId }: Station): Promise<Station> => {
+  
+  const companyOwner = await prisma.company.findUnique({
+    where: { id: companyId }
+  })
+
+  if (!companyOwner) {
+    throw new Error("Company not found!")
+  }
+
   const newStation = await prisma.station.create({
     data: {
       name: name,
