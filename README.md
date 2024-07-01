@@ -31,8 +31,24 @@ The assignment was implemented using the following technologies:
 
 | `POST`   | `/api/companies`                 | Create a new company              |
 | `GET`    | `/api/companies` |Retrieve all comapnies |
-| `GET`    | `/api/users?active=true&sort=username&direction=asc&search=nodes` | Search for "nodes" in active users, sorted  by username ascendingly. |
+| `GET`    | `/ap/search?companyId=cly30&radiusKilometers=10&latitude=42.44205&longitude=1.53489` | Search for stations as specified in Task 2. |
 
+Let's see in detail the POST APIs and the API created to fulfill the Task 2.
+
+### POST `/api/companies`
+
+```http
+POST /api/companies
+```
+The body has to be of type JSON and shoul have the following fields: 
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `name` | `string` | **Required**. Name of the company |
+| `parentId` | `string` | **Optional**. Id of the parent company that owns this company |
+
+### POST `/api/stations`
+
+### POST `/api/companies`
 
 ## Note on SQL Query for Finding Nearest Stations
 
