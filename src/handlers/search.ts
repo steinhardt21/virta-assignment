@@ -5,7 +5,7 @@ import { prisma } from "../db"
 export const SearchQuerySchema = z.object({
   latitude: z.string(),
   longitude: z.string(),
-  radius: z.string(),
+  radiusKilometers: z.string(),
   companyId: z.string()
 })
 

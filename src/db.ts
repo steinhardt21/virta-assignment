@@ -5,7 +5,7 @@ import { SearchQuery } from './handlers/search'
 export const prisma = new PrismaClient().$extends({
   model: {
     station: {
-      async findNearestStationsWithinRadiusForCompany({companyId, latitude, longitude, radius}: SearchQuery): Promise<StationModelDB[]> {
+      async findNearestStationsWithinRadiusForCompany({companyId, latitude, longitude, radiusKilometers}: SearchQuery): Promise<StationModelDB[]> {
         const result = await prisma.$queryRaw<
         StationModelDB[]
         > `
@@ -22,8 +22,8 @@ export const prisma = new PrismaClient().$extends({
         FROM "Station" AS s
         JOIN company_hierarchy ch ON s.company_id = ch.id
         WHERE
-        earth_box(ll_to_earth (${Number(latitude)},${Number(longitude)}), ${Number(radius)}) @> ll_to_earth (latitude, longitude)
-        AND earth_distance(ll_to_earth (${Number(latitude)},${Number(longitude)}), ll_to_earth (latitude, longitude)) < ${Number(radius)}
+        earth_box(ll_to_earth (${Number(latitude)},${Number(longitude)}), ${Number(radiusKilometers)}) @> ll_to_earth (latitude, longitude)
+        AND earth_distance(ll_to_earth (${Number(latitude)},${Number(longitude)}), ll_to_earth (latitude, longitude)) < ${Number(radiusKilometers)}
         ORDER BY
         distance;`
 

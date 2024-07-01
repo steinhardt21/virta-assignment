@@ -83,9 +83,9 @@ const companiesApp = new Hono()
 
 const searchApp = new Hono()
   .get('/', zValidator('json', SearchQuerySchema), (c) => {
-    const { latitude, longitude, radius, companyId } = c.req.valid("json")
+    const { latitude, longitude, radiusKilometers, companyId } = c.req.valid("json")
     try {
-      const stationsGroupedByLocations = getStationsWithinRadiusForCompanyGrouped({ latitude, longitude, radius, companyId })
+      const stationsGroupedByLocations = getStationsWithinRadiusForCompanyGrouped({ latitude, longitude, radiusKilometers, companyId })
       return c.json({ data: stationsGroupedByLocations }, 200)
     } catch (err) {
       return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
