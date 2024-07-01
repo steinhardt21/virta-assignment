@@ -27,7 +27,7 @@ export const getStationsWithinRadiusForCompanyGrouped = async (props: SearchQuer
   return groupedStations
 }
 
-
+/** Groups stations by their location (latitude, longitude) */
 function groupStationsByLocation(stations: StationModelDB[]): GroupedLocation[] {
   const locationMap: Record<string, GroupedLocation> = {};
 
