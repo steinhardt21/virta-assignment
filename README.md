@@ -19,6 +19,21 @@ The assignment was implemented using the following technologies:
 - [Zod](https://zod.dev/): TypeScript-first schema validation with static type inference.
 - Docker and Docker Compose: These tools were used to streamline and expedite the project's setup and execution.
 
+## APIs developed
+
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `/api/stations`                             | Retrieve all stations.                      |
+| `POST`   | `/api/stations`                             | Create a new station.                       |
+| `GET`    | `/api/stations/abdcee`                          | Retrieve stations with id abcdee.                       |
+| `PUT`    | `/api/stations/abdcee`                          | Update data in station with id abdcee.                 |
+| `DELETE` | `/api/stations/abdcee`                   | Delete station with id abdcee.                    |
+
+| `POST`   | `/api/companies`                 | Create a new company              |
+| `GET`    | `/api/companies` |Retrieve all comapnies |
+| `GET`    | `/api/users?active=true&sort=username&direction=asc&search=nodes` | Search for "nodes" in active users, sorted  by username ascendingly. |
+
+
 ## Note on SQL Query for Finding Nearest Stations
 
 I created the following SQL query for PostgreSQL to find the nearest stations within a specified radius for a given company:
@@ -48,7 +63,6 @@ async findNearestStationsWithinRadiusForCompany({ companyId, latitude, longitude
   return result;
 }
 ```
-Reasons for Using This Approach
 As PostgreSQL doesn’t have a data type for 3D points, the cube data type is used to represent 3D cubes. Points are represented as zero-sized cubes, which is both simple and efficient. A domain-specific type, earth, is defined as a descendant of the cube type, incorporating additional sanity checks (e.g., ensuring the point is close to the planet's surface).
 
 Here are some useful functions that justify this approach:
