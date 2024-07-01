@@ -25,6 +25,11 @@ export const getOneStation = async (id: string): Promise<Station | null> => {
     const station = await prisma.station.findUnique({
       where: { id: id }
     })
+
+    if (!station) {
+      return null
+    }
+
     return StationSchema.parse(station)
 }
 
@@ -46,6 +51,7 @@ export const createStation = async ({ name, latitude, longitude, companyId }: St
       companyId: companyId
     }
   })
+
   return StationSchema.parse(newStation)
 }
 
@@ -53,6 +59,10 @@ export const deleteStation = async (id: string): Promise<Station | null> => {
     const stationDeleted = await prisma.station.delete({
       where: { id: id }
     })
+
+    if (!stationDeleted) {
+      return null
+    }
 
     return StationSchema.parse(stationDeleted)
 }

@@ -28,7 +28,11 @@ const stationsApp = new Hono()
       return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
     }
   })
-  .post('/', zValidator("json", StationSchema), (c) => {
+  .post('/', zValidator("json", StationSchema, (result, c) => {
+    if (!result.success) {
+      return c.text("Input payload is not correct. Be sure to insert in the body: name, companyId, latitude and longiture.", 400)
+    }
+    }), (c) => {
     try {
       const validatedPayload =  c.req.valid("json")
       const newStation = createStation({ ...validatedPayload })
@@ -71,7 +75,11 @@ const companiesApp = new Hono()
     }
   
   })
-  .post('/', zValidator("json", CompanySchema), (c) => {
+  .post('/', zValidator("json", CompanySchema, (result, c) => {
+    if (!result.success) {
+      return c.text("Input payload is not correct. Be sure to insert in the body: name, parentId.", 400)
+    }
+    }), (c) => {
     try {
       const validatedPayload = c.req.valid("json")
       const newCompany = createCompany({ ...validatedPayload })
@@ -82,8 +90,13 @@ const companiesApp = new Hono()
   })
 
 const searchApp = new Hono()
-  .get('/', zValidator('json', SearchQuerySchema), (c) => {
+  .get('/', zValidator('json', SearchQuerySchema, (result, c) => {
+    if (!result.success) {
+      return c.text("Input payload is not correct. Be sure to insert in the body: radiusKilometers, companyId, latitude and longiture.", 400)
+    }
+    }), (c) => {
     const { latitude, longitude, radiusKilometers, companyId } = c.req.valid("json")
+    
     try {
       const stationsGroupedByLocations = getStationsWithinRadiusForCompanyGrouped({ latitude, longitude, radiusKilometers, companyId })
       return c.json({ data: stationsGroupedByLocations }, 200)

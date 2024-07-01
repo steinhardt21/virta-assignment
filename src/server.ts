@@ -21,10 +21,5 @@ app.route('/api/stations', stationsApp)
 // Custom Not Found Message
 app.notFound((c) => c.json({ message: "Not Found" }, 404));
 
-// Error handling
-app.onError((err, c) => {
-  console.error(`${err}`)
-  return c.text('Custom Error Message', 500)
-})
 
 export default app
