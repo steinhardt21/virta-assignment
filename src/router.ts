@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { getStations, getOneStation, createStation, deleteStation, updateStation, StationSchema } from "./handlers/station";
 import { getCompanies, CompanySchema, createCompany } from "./handlers/company";
-import { getStationsWithinRadiusForCompany } from "./handlers/search";
+import { getStationsWithinRadiusForCompanyGrouped, SearchQuerySchema } from "./handlers/search";
 
 const stationsApp = new Hono()
   .get('/', (c) => {
@@ -82,6 +82,14 @@ const companiesApp = new Hono()
   })
 
 const searchApp = new Hono()
-  .get('/', getStationsWithinRadiusForCompany)
+  .get('/', zValidator('json', SearchQuerySchema), (c) => {
+    const { latitude, longitude, radius, companyId } = c.req.valid("json")
+    try {
+      const stationsGroupedByLocations = getStationsWithinRadiusForCompanyGrouped({ latitude, longitude, radius, companyId })
+      return c.json({ data: stationsGroupedByLocations }, 200)
+    } catch (err) {
+      return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
+    }
+  })
 
 export { stationsApp, companiesApp, searchApp };
