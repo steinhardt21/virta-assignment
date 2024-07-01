@@ -103,7 +103,7 @@ This method offers several advantages, such as speed, simplicity, and the abilit
 ## Next possible developments
 - Complete the testing of the APIs
 - Add Rate Limiter in order to prevent the abuse of the APIs
-- Add indexes on the database
+- Add relevant indexes on the database
 - Add caching
 
 # Run the project
