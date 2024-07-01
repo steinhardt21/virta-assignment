@@ -28,7 +28,6 @@ The assignment was implemented using the following technologies:
 | `GET`    | `/api/stations/abdcee`                          | Retrieve stations with id abcdee.                       |
 | `PUT`    | `/api/stations/abdcee`                          | Update data in station with id abdcee.                 |
 | `DELETE` | `/api/stations/abdcee`                   | Delete station with id abdcee.                    |
-
 | `POST`   | `/api/companies`                 | Create a new company              |
 | `GET`    | `/api/companies` |Retrieve all comapnies |
 | `GET`    | `/ap/search?companyId=cly30&radiusKilometers=10&latitude=42.44205&longitude=1.53489` | Search for stations as specified in Task 2. |
