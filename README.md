@@ -30,7 +30,7 @@ The assignment was implemented using the following technologies:
 | `DELETE` | `/api/stations/abdcee`                   | Delete station with id abdcee.                    |
 | `POST`   | `/api/companies`                 | Create a new company              |
 | `GET`    | `/api/companies` |Retrieve all comapnies |
-| `GET`    | `/ap/search?companyId=cly30&radiusKilometers=10&latitude=42.44205&longitude=1.53489` | Search for stations as specified in Task 2. |
+| `GET`    | `/api/search?companyId=cly30&radiusKilometers=10&latitude=42.44205&longitude=1.53489` | Search for stations as specified in Task 2. |
 
 Let's see in detail the POST APIs and the API created to fulfill the Task 2.
 
@@ -39,7 +39,7 @@ Let's see in detail the POST APIs and the API created to fulfill the Task 2.
 ```http
 POST /api/companies
 ```
-The body has to be of type JSON and shoul have the following fields: 
+The body has to be of type JSON and should have the following fields: 
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | `name` | `string` | **Required**. Name of the company |
@@ -47,7 +47,30 @@ The body has to be of type JSON and shoul have the following fields:
 
 ### POST `/api/stations`
 
-### POST `/api/companies`
+```http
+POST /api/stations
+```
+The body has to be of type JSON and must have the following fields: 
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `name` | `string` | **Required**. Name of the company |
+| `companyId` | `string` | **Required**. Id of the company that owns the station |
+| `latitude` | `string` | **Required**. Latitude |
+| `longitude` | `string` | **Required**. Longitude |
+
+### GET `/api/search`
+Api developed to fulfill the Task 2.
+
+```http
+GET /api/search?companyId=cly30&radiusKilometers=10&latitude=42.44205&longitude=1.53489
+```
+The body has to be of type JSON and must have the following fields: 
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `companyId` | `string` | **Required**. Id of the company|
+| `radiusKilometers` | `string` | **Required**. Radius expressed in Kilometers|
+| `latitude` | `string` | **Required**. Latitude |
+| `longitude` | `string` | **Required**. Longitude |
 
 ## Note on SQL Query for Finding Nearest Stations
 
