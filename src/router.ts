@@ -3,7 +3,7 @@ import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 import { getStations, getOneStation, createStation, deleteStation, updateStation, StationSchema } from "./handlers/station";
-import { getCompanies, createCompany } from "./handlers/company";
+import { getCompanies, CompanySchema, createCompany } from "./handlers/company";
 import { getStationsWithinRadiusForCompany } from "./handlers/search";
 
 const stationsApp = new Hono()
@@ -62,8 +62,24 @@ const stationsApp = new Hono()
   })
 
 const companiesApp = new Hono()
-  .get('/', getCompanies)
-  .post('/', createCompany)
+  .get('/', (c) => {
+    try {
+      const companies = getCompanies()
+      return c.json({ data: companies }, 200)
+    } catch (err) {
+      return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
+    }
+  
+  })
+  .post('/', zValidator("json", CompanySchema), (c) => {
+    try {
+      const validatedPayload = c.req.valid("json")
+      const newCompany = createCompany({ ...validatedPayload })
+      return c.json({ data: newCompany }, 201)
+    } catch (err) {
+      return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
+    }
+  })
 
 const searchApp = new Hono()
   .get('/', getStationsWithinRadiusForCompany)

@@ -1,53 +1,41 @@
+import { z } from "zod"
 import { prisma } from "../db"
-import type { Context } from "hono"
 
-type Company = {
-  name: string
-  parentCompanyID?: string
+export const CompanySchema = z.object({
+  name: z.string(),
+  parentId: z.string().optional()
+})
+
+export type Company = z.infer<typeof CompanySchema>
+
+export const getCompanies = async (): Promise<Company[]> => {
+  const parsedCompanies: Company[] = []
+  const companies = await prisma.company.findMany()
+
+  companies.forEach((company) => {
+    parsedCompanies.push(CompanySchema.parse(company))
+  })
+
+  return parsedCompanies
 }
 
-export const getCompanies = async (c: Context) => {
-  try {
-    const companies = await prisma.company.findMany()
-    return c.json(companies, 200)
-  } catch (err) {
-    console.error(err)
-    return c.json(
-      { error: 'Something went wrong.', err: JSON.stringify(err) },
-      { status: 500 }
-    )
-  }
-}
-
-export const createCompany = async (c: Context) => {
-
-  if (c.req.header('Content-Type') !== 'application/json') {
-    return c.json({ error: 'JSON body expected.' }, { status: 406 })
-  }
-
-  const body: Company = await c.req.json()
-
-  try {
-    const parentCompany = body.parentCompanyID ? body.parentCompanyID : null
-
-    await prisma.company.create({
-      data: {
-        name: body.name,
-        parentId: parentCompany
-      }
+export const createCompany = async ({ name, parentId }: Company): Promise<Company> => {
+  if (parentId !== undefined) {
+    const parentCompany = await prisma.company.findUnique({
+      where: { id: parentId }
     })
 
-    return c.json(
-      { message: 'Success' },
-      { status: 201 }
-    )
-  } catch (err) {
-
-    console.error(err)
-
-    return c.json(
-      { error: 'Something went wrong.', err: JSON.stringify(err) },
-      { status: 500 }
-    )
+    if (!parentCompany) {
+      throw new Error("Parent company not found!")
+    }
   }
+  
+  const newCompany = await prisma.company.create({
+    data: {
+      name: name,
+      parentId: parentId
+    }
+  })
+
+  return CompanySchema.parse(newCompany)
 }
