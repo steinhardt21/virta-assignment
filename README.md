@@ -1,12 +1,3 @@
-```
-npm install
-npm run dev
-```
-
-```
-open http://localhost:3000
-```
-
 # Virta assigmemt
 This repository contains the solutions for Task 1 and Task 2. Unfortunately, I had a very tight schedule last week, but I hope that this work meets your requirements.
 
@@ -112,4 +103,11 @@ This method offers several advantages, such as speed, simplicity, and the abilit
 ## Next possible developments
 - Complete the testing of the APIs
 - Add Rate Limiter in order to prevent the abuse of the APIs
-- Add caching 
+- Add caching
+
+# Run the project
+In order to run the project we should set the only  ```env ``` variable that is DATABASE_URL. Then the following comands should be run:
+
+```
+docker-compose up
+```
