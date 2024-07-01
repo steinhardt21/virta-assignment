@@ -12,6 +12,7 @@ const stationsApp = new Hono()
       const stations = await getStations()
       return c.json({ data: stations }, 200)
     } catch (err) {
+      console.error(err)
       return c.json(
         { error: 'Something went wrong.', err: JSON.stringify(err) },
         500
@@ -74,6 +75,7 @@ const companiesApp = new Hono()
       const companies = await getCompanies()
       return c.json({ data: companies }, 200)
     } catch (err) {
+      console.error(err)
       return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
     }
   
@@ -88,6 +90,7 @@ const companiesApp = new Hono()
       const newCompany = await createCompany({ ...validatedPayload })
       return c.json({ data: newCompany }, 201)
     } catch (err) {
+      console.error(err)
       return c.json({ error: 'Something went wrong.', err: JSON.stringify(err) }, 500)
     }
   })

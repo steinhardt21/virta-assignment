@@ -24,16 +24,12 @@ export const createCompany = async ({ name, parentId }: Company): Promise<Compan
       throw new Error("Parent company not found!")
     }
   }
-  console.log("name", name)
-  console.log("parentId", parentId)
   const newCompany = await prisma.company.create({
     data: {
       name: name,
       parentId: parentId !== undefined ? parentId : null
     }
   })
-
-  console.log("newCompany", newCompany)
 
   return newCompany
 }
