@@ -7,7 +7,17 @@ npm run dev
 open http://localhost:3000
 ```
 
-# Virsta assigmemt
+# Virta assigmemt
+This repository contains the solutions for Task 1 and Task 2. Unfortunately, I had a very tight schedule last week, but I hope that this work meets your requirements.
+
+## Tech stack
+The assignment was implemented using the following technologies:
+
+- [HonoJS](https://hono.dev/): A powerful new Node.js framework that I chose for its ease of deployment on various JavaScript runtimes, such as Cloudflare Workers. This choice ensures that the APIs are easily scalable at a low cost. Additionally, I wanted to experiment with this promising framework for the project.
+- PostgresDB: A relational database that can be enhanced with [PostGIS](https://postgis.net/), which adds support for storing, indexing, and querying geospatial data. This feature is crucial for efficiently developing Task 2 of the assignment. In particular, I utilized the `ll_to_earth` and `earth_box` functions.
+- [Prisma](https://www.prisma.io/): A highly useful ORM for communicating with PostgresDB, facilitating the creation of a maintainable data layer.
+- [Zod](https://zod.dev/): TypeScript-first schema validation with static type inference.
+- Docker and Docker Compose: These tools were used to streamline and expedite the project's setup and execution.
 
 ## Note on SQL Query for Finding Nearest Stations
 
@@ -47,4 +57,7 @@ Here are some useful functions that justify this approach:
 - earth_box(point, radius): Creates a bounding cube to contain all points within a specified radius from a given point. This cube is an approximation, but it can be used for efficient searching with the @> (containment) operator, which supports GIST indexes.
 This method offers several advantages, such as speed, simplicity, and the ability to redefine the planet's radius (useful for non-Earth calculations or re-defining units of measurement).
 
-
+## Next possible developments
+- Complete the testing of the APIs
+- Add Rate Limiter in order to prevent the abuse of the APIs
+- Add caching 
