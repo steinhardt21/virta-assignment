@@ -108,6 +108,12 @@ This method offers several advantages, such as speed, simplicity, and the abilit
 # Run the project
 In order to run the project we should set the only  ```env ``` variable that is DATABASE_URL. Then the following comands should be run:
 
+Then in order to run the Postgres instance we should run:
 ```
+docker-compose build --no-cache
 docker-compose up
+```
+And after that, we can run the following command to start the server (unfortunately, I had issues starting it with Docker Compose due to the database connection):
+```
+pnpm dev
 ```
