@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { prisma } from "../db"
+import { Company as CompanyModelDB } from "@prisma/client"
 
 export const CompanySchema = z.object({
   name: z.string(),
@@ -8,18 +9,12 @@ export const CompanySchema = z.object({
 
 export type Company = z.infer<typeof CompanySchema>
 
-export const getCompanies = async (): Promise<Company[]> => {
-  const parsedCompanies: Company[] = []
+export const getCompanies = async (): Promise<CompanyModelDB[]> => {
   const companies = await prisma.company.findMany()
-
-  companies.forEach((company) => {
-    parsedCompanies.push(CompanySchema.parse(company))
-  })
-
-  return parsedCompanies
+  return companies
 }
 
-export const createCompany = async ({ name, parentId }: Company): Promise<Company> => {
+export const createCompany = async ({ name, parentId }: Company): Promise<CompanyModelDB> => {
   if (parentId !== undefined) {
     const parentCompany = await prisma.company.findUnique({
       where: { id: parentId }
@@ -29,13 +24,16 @@ export const createCompany = async ({ name, parentId }: Company): Promise<Compan
       throw new Error("Parent company not found!")
     }
   }
-  
+  console.log("name", name)
+  console.log("parentId", parentId)
   const newCompany = await prisma.company.create({
     data: {
       name: name,
-      parentId: parentId
+      parentId: parentId !== undefined ? parentId : null
     }
   })
 
-  return CompanySchema.parse(newCompany)
+  console.log("newCompany", newCompany)
+
+  return newCompany
 }

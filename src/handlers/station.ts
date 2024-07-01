@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { prisma } from "../db"
+import { Station as StationModelDB } from "@prisma/client"
 
 export const StationSchema = z.object({
   name: z.string(),
@@ -10,18 +11,12 @@ export const StationSchema = z.object({
 
 export type Station = z.infer<typeof StationSchema>
 
-export const getStations = async (): Promise<Station[]> => {
-    const parsedStations: Station[] = []
+export const getStations = async (): Promise<StationModelDB[]> => {
     const stations = await prisma.station.findMany()
-
-    stations.forEach((station) => {
-      parsedStations.push(StationSchema.parse(station))
-    })
-    
-    return parsedStations
+    return stations
 }
 
-export const getOneStation = async (id: string): Promise<Station | null> => {
+export const getOneStation = async (id: string): Promise<StationModelDB | null> => {
     const station = await prisma.station.findUnique({
       where: { id: id }
     })
@@ -30,17 +25,17 @@ export const getOneStation = async (id: string): Promise<Station | null> => {
       return null
     }
 
-    return StationSchema.parse(station)
+    return station
 }
 
-export const createStation = async ({ name, latitude, longitude, companyId }: Station): Promise<Station> => {
+export const createStation = async ({ name, latitude, longitude, companyId }: Station): Promise<StationModelDB> => {
   
   const companyOwner = await prisma.company.findUnique({
     where: { id: companyId }
   })
 
   if (!companyOwner) {
-    throw new Error("Company not found!")
+    throw new Error("Company not found! Insert correct companyId.")
   }
 
   const newStation = await prisma.station.create({
@@ -52,10 +47,10 @@ export const createStation = async ({ name, latitude, longitude, companyId }: St
     }
   })
 
-  return StationSchema.parse(newStation)
+  return newStation
 }
 
-export const deleteStation = async (id: string): Promise<Station | null> => {
+export const deleteStation = async (id: string): Promise<StationModelDB | null> => {
     const stationDeleted = await prisma.station.delete({
       where: { id: id }
     })
@@ -64,10 +59,10 @@ export const deleteStation = async (id: string): Promise<Station | null> => {
       return null
     }
 
-    return StationSchema.parse(stationDeleted)
+    return stationDeleted
 }
 
-export const updateStation = async ({stationId, newNameStation, newCompanyId}: { stationId: string, newNameStation?: string, newCompanyId?: string}): Promise<Station> => {
+export const updateStation = async ({stationId, newNameStation, newCompanyId}: { stationId: string, newNameStation?: string, newCompanyId?: string}): Promise<StationModelDB> => {
   const updatedStation = await prisma.station.update({
     where: { id: stationId },
     data: {
@@ -76,5 +71,5 @@ export const updateStation = async ({stationId, newNameStation, newCompanyId}: {
     }
   })
 
-  return StationSchema.parse(updatedStation)
+  return updatedStation
 }

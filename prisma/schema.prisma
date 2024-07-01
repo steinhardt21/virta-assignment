@@ -24,7 +24,7 @@ model Station {
   updatedAt DateTime @updatedAt @map("updated-at")
 
   company   Company @relation(fields: [companyId], references: [id])
-  companyId String  @unique @map("company-id")
+  companyId String  @map("company-id")
 }
 
 model Company {
